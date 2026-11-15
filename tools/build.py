@@ -23,26 +23,41 @@ WALK_V = 80       # 步行速度（公尺／分）
 WALK_MAX = 15     # 收錄到步行幾分鐘
 WALKS = [5, 10, 15]
 
-# 路線定義。seg：(PTX 路線代碼, 起站, 迄站)，依序相接；on：頁面是否已開放。
+# 路線定義。seg：(PTX 路線代碼, 起站, 迄站)，依序相接；on=False 可暫時不開放某條線。
 # 高鐵、捷運、林鐵日後要加：在 data/raw/ 放同格式的車站與站序檔，於此加一筆並指定來源即可。
 LINES = [
-    dict(id="north", name="縱貫線北段", kind="幹線", color="#b5483c", seg=[("WL", "基隆", "竹南")]),
-    dict(id="mountain", name="山線", kind="幹線", color="#4f7f3a", seg=[("WL", "竹南", "彰化")]),
-    dict(id="coast", name="海線", kind="幹線", color="#1f7a8c", seg=[("WL-C", "竹南", "彰化")], on=True,
+    dict(id="north", name="縱貫線北段", kind="幹線", color="#b5483c", seg=[("WL", "基隆", "竹南")],
+         intro="從基隆港邊出發，穿過臺北盆地到竹南，是全臺文資最密的一段鐵路。光是臺北站，走路 15 分鐘內就有 92 處。"),
+    dict(id="mountain", name="山線", kind="幹線", color="#4f7f3a", seg=[("WL", "竹南", "彰化")],
+         intro="竹南到彰化走內陸的一段，翻過三義的陡坡再下到臺中盆地。臺中站的舊站房是國定古蹟，周邊的倉庫與車庫遺構也都登錄為文資。"),
+    dict(id="coast", name="海線", kind="幹線", color="#1f7a8c", seg=[("WL-C", "竹南", "彰化")],
          intro="1922 年全線通車的海岸線，為了避開山線的陡坡而建。一百多年過去，沿線還有好幾座當年的木造車站站在原地，照樣賣票、照樣有人等車。"),
-    dict(id="south", name="縱貫線南段", kind="幹線", color="#c47a1e", seg=[("WL", "彰化", "高雄")]),
-    dict(id="pingtung", name="屏東線", kind="幹線", color="#8a5aa8", seg=[("WL", "高雄", "屏東"), ("SL", "屏東", "枋寮")]),
-    dict(id="southlink", name="南迴線", kind="幹線", color="#2b6cb0", seg=[("SL", "枋寮", "臺東")]),
-    dict(id="taitung", name="臺東線", kind="幹線", color="#3d8f6f", seg=[("EL", "花蓮", "臺東")]),
-    dict(id="northlink", name="北迴線", kind="幹線", color="#5b6b7a", seg=[("EL", "蘇澳新", "花蓮")]),
-    dict(id="yilan", name="宜蘭線", kind="幹線", color="#c2567a", seg=[("EL", "八堵", "蘇澳新"), ("SU", "蘇澳新", "蘇澳")]),
-    dict(id="pingxi", name="平溪線", kind="支線", color="#a8714a", seg=[("PX", "三貂嶺", "菁桐")]),
-    dict(id="shenao", name="深澳線", kind="支線", color="#3b7bbf", seg=[("SA", "瑞芳", "八斗子")]),
-    dict(id="neiwan", name="內灣線", kind="支線", color="#7a8f2a", seg=[("NW", "北新竹", "內灣")]),
-    dict(id="liujia", name="六家線", kind="支線", color="#8c6bb1", seg=[("LJ", "竹中", "六家")]),
-    dict(id="jiji", name="集集線", kind="支線", color="#2f7d6d", seg=[("JJ", "二水", "車埕")]),
-    dict(id="shalun", name="沙崙線", kind="支線", color="#d08a2e", seg=[("SH", "中洲", "沙崙")]),
-    dict(id="chengzhui", name="成追線", kind="支線", color="#6c6058", seg=[("CZ", "成功", "追分")]),
+    dict(id="south", name="縱貫線南段", kind="幹線", color="#c47a1e", seg=[("WL", "彰化", "高雄")],
+         intro="彰化到高雄，一路穿過嘉南平原。沿途的文資從荷西時期排到戰後，臺南站走 15 分鐘就跨了五個時代。"),
+    dict(id="pingtung", name="屏東線", kind="幹線", color="#8a5aa8", seg=[("WL", "高雄", "屏東"), ("SL", "屏東", "枋寮")],
+         intro="高雄往南到枋寮，經過鳳山、屏東與六堆客家庄。步行範圍內沒有國定古蹟，但竹田、佳冬這些小站，走幾步就有老屋。"),
+    dict(id="southlink", name="南迴線", kind="幹線", color="#2b6cb0", seg=[("SL", "枋寮", "臺東")],
+         intro="枋寮到臺東，環島鐵路最後接上的一段。沿線多是山與海，走路到得了的文資不多，集中在頭尾兩端。"),
+    dict(id="taitung", name="臺東線", kind="幹線", color="#3d8f6f", seg=[("EL", "花蓮", "臺東")],
+         intro="花蓮到臺東，沿著花東縱谷走。走路到得了的文資多半是日治時期留下的，散落在幾個小站旁。"),
+    dict(id="northlink", name="北迴線", kind="幹線", color="#5b6b7a", seg=[("EL", "蘇澳新", "花蓮")],
+         intro="蘇澳新到花蓮，1980 年通車，沿著斷崖一路鑽隧道。13 站裡，走路 15 分鐘到得了的文資只有 1 處。"),
+    dict(id="yilan", name="宜蘭線", kind="幹線", color="#c2567a", seg=[("EL", "八堵", "蘇澳新"), ("SU", "蘇澳新", "蘇澳")],
+         intro="八堵到蘇澳，穿過草嶺隧道就是蘭陽平原。宜蘭站出站 5 分鐘內有 13 處文資，全臺第一，而且多數是臺鐵自己的舊建築。"),
+    dict(id="pingxi", name="平溪線", kind="支線", color="#a8714a", seg=[("PX", "三貂嶺", "菁桐")],
+         intro="三貂嶺到菁桐，原本是運煤的鐵路。終點菁桐站的木造站房本身就是古蹟。"),
+    dict(id="shenao", name="深澳線", kind="支線", color="#3b7bbf", seg=[("SA", "瑞芳", "八斗子")],
+         intro="瑞芳到八斗子，貼著海邊走的短支線。"),
+    dict(id="neiwan", name="內灣線", kind="支線", color="#7a8f2a", seg=[("NW", "北新竹", "內灣")],
+         intro="北新竹到內灣，沿著頭前溪往山裡走。竹東站的站房是歷史建築。"),
+    dict(id="liujia", name="六家線", kind="支線", color="#8c6bb1", seg=[("LJ", "竹中", "六家")],
+         intro="從竹中岔出、接到高鐵新竹站的短支線。"),
+    dict(id="jiji", name="集集線", kind="支線", color="#2f7d6d", seg=[("JJ", "二水", "車埕")],
+         intro="二水到車埕，沿濁水溪往上游走。全線七站，每一站走路 15 分鐘內都有文資。"),
+    dict(id="shalun", name="沙崙線", kind="支線", color="#d08a2e", seg=[("SH", "中洲", "沙崙")],
+         intro="中洲到沙崙，接高鐵臺南站的短支線。沿線走路 15 分鐘內沒有文資。"),
+    dict(id="chengzhui", name="成追線", kind="支線", color="#6c6058", seg=[("CZ", "成功", "追分")],
+         intro="成功到追分，連接山線與海線的短線。"),
 ]
 
 # 「車站本身是文資」的判定：名稱含站名與「車站／火車站／驛」，且不是下列附屬設施；另可用清單強制加入或排除。
@@ -148,7 +163,7 @@ CACHE = {}
 def station(sid):
     if sid not in CACHE:
         s = ST[sid]
-        CACHE[sid] = {"id": sid, "name": s["StationName"]["Zh_tw"], "en": s["StationName"]["En"],
+        CACHE[sid] = {"id": sid, "name": s["StationName"]["Zh_tw"], "en": s["StationName"]["En"].split("_")[0],
                       "lat": s["StationPosition"]["PositionLat"], "lng": s["StationPosition"]["PositionLon"],
                       "sites": station_sites(sid)}
     return CACHE[sid]
@@ -179,7 +194,7 @@ def facts(L, sts):
             uniq.setdefault((o["c"], o["i"]), (o, s))
     total = len(uniq)
     if not total:
-        return out
+        return [{"k": "老實說", "big": "0", "unit": "處", "t": f"這條線的 {len(sts)} 個車站，走路 {WALK_MAX} 分鐘內都沒有登錄的文資。", "st": []}]
     with_sites = [s for s in sts if s["sites"]]
 
     # 1. 車站本身是文資
@@ -226,7 +241,7 @@ def facts(L, sts):
         best = min(((o2, s2) for s2 in sts for o2 in s2["sites"] if o2["i"] == o["i"] and o2["c"] == o["c"]), key=lambda x: x[0]["d"])
         o, s = best
         t = f"「{o['n']}」，{fmt_year(o['y'])}{'（推估）' if o['e'] else ''}。從{s['name']}站走 {o['m']} 分鐘。"
-        out.append({"k": "最老的一處", "big": str(abs(o["y"])), "unit": ("年前・西元前" if o["y"] < 0 else "年・" + ERAS[o["r"]]["name"]), "t": t, "st": [s["id"]]})
+        out.append({"k": "最老的一處", "big": ("前 " if o["y"] < 0 else "") + str(abs(o["y"])), "unit": "年・" + ERAS[o["r"]]["name"], "t": t, "st": [s["id"]]})
 
         # 5. 跨越幾個時代
         eras = sorted({o["r"] for o, _ in uniq.values()})
@@ -267,7 +282,7 @@ for L in LINES:
            "from": sts[0]["name"], "to": sts[-1]["name"], "km": km[-1], "facts": fx, "stations": sts}
     with open(os.path.join(ROOT, "data", "lines", L["id"] + ".json"), "w", encoding="utf-8") as f:
         json.dump(doc, f, ensure_ascii=False, separators=(",", ":"))
-    index_lines.append({"id": L["id"], "name": L["name"], "kind": L["kind"], "color": L["color"], "on": bool(L.get("on")),
+    index_lines.append({"id": L["id"], "name": L["name"], "kind": L["kind"], "color": L["color"], "on": L.get("on", True),
                         "from": sts[0]["name"], "to": sts[-1]["name"], "km": km[-1], "n": len(sts),
                         "nWith": sum(1 for s in sts if s["sites"]), "nSites": len(uniq),
                         "nNat": sum(1 for o in uniq.values() if o["k"] == 0),
@@ -279,6 +294,65 @@ for L in LINES:
         if s.get("h"):
             o = [o for o in s["sites"] if o.get("st")][0]
             print(f"    車站即文資：{s['name']} ← {o['n']}（{CATS[o['k']]['name']}，{o['y']}，{o['d']} 公尺）")
+
+# ---------- 排行榜 ----------
+home = {}
+for L in LINES:
+    for sid in line_stations(L)[0]:
+        home.setdefault(sid, L["id"])
+
+
+def ref(sid):
+    return {"id": sid, "name": CACHE[sid]["name"], "line": home[sid]}
+
+
+SIDS = list(home)
+
+
+def top(key, n=10):
+    rows = sorted(((key(CACHE[i]), i) for i in SIDS), key=lambda x: (-x[0], x[1]))
+    return [dict(ref(i), v=v) for v, i in rows[:n] if v > 0]
+
+
+boards = [
+    {"id": "five", "title": "下車 5 分鐘就有", "sub": "出站走 5 分鐘內的文資數", "unit": "處",
+     "rows": top(lambda s: sum(1 for o in s["sites"] if o["m"] <= 5))},
+    {"id": "fifteen", "title": "一站逛不完", "sub": f"出站走 {WALK_MAX} 分鐘內的文資數", "unit": "處", "rows": top(lambda s: len(s["sites"]))},
+    {"id": "eras", "title": "一站跨最多時代", "sub": f"走 {WALK_MAX} 分鐘內的文資橫跨幾個時代", "unit": "個時代",
+     "rows": [dict(r, note="、".join(ERAS[e]["name"] for e in sorted({o["r"] for o in CACHE[r["id"]]["sites"]})))
+              for r in top(lambda s: len({o["r"] for o in s["sites"]}) * 1000 + len(s["sites"]), 8)]},
+]
+for r in boards[2]["rows"]:
+    r["v"] //= 1000
+nat = []
+for i in SIDS:
+    c = [o for o in CACHE[i]["sites"] if o["k"] == 0]
+    if c:
+        o = c[0]
+        nat.append(dict(ref(i), v=o["m"], note=f"{o['n']}・推估 {o['d']} 公尺" + ("（車站本身）" if o.get("st") else "")))
+        nat[-1]["_d"] = o["d"]
+nat.sort(key=lambda r: r["_d"])
+for r in nat:
+    del r["_d"]
+boards.append({"id": "national", "title": "最短的路看國定古蹟", "sub": "下車後走到最近一處國定古蹟的時間", "unit": "分鐘", "asc": 1, "rows": nat[:10]})
+old = {}
+for i in SIDS:
+    for o in CACHE[i]["sites"]:
+        if o["y"] is not None and ((o["c"], o["i"]) not in old or o["d"] < old[(o["c"], o["i"])][0]["d"]):
+            old[(o["c"], o["i"])] = (o, i)
+rows = sorted(old.values(), key=lambda x: x[0]["y"])[:10]
+boards.append({"id": "oldest", "title": "走路就到的最老文資", "sub": "依創建年排序；一處只列最近的車站", "unit": "", "text": 1,
+               "rows": [dict(ref(i), v=fmt_year(o["y"]).replace(" 年", "").replace("西元前 ", "前 "), note=f"{o['n']}・走 {o['m']} 分" + ("・年代為推估" if o["e"] else "")) for o, i in rows]})
+hs = [(o, i) for i in SIDS for o in CACHE[i]["sites"] if o.get("st")]
+seen = set(); rows = []
+for o, i in sorted(hs, key=lambda x: (x[0]["y"], x[0]["d"])):
+    if i not in seen:
+        seen.add(i); rows.append(dict(ref(i), v=str(o["y"]), k=o["k"], note=f"{o['n']}・{CATS[o['k']]['name']}"))
+boards.append({"id": "stations", "title": "車站本身就是文資", "sub": f"全臺 {len(rows)} 座，依站房落成年排序（含已不作車站使用的舊站房）", "unit": "", "text": 1, "all": 1, "rows": rows})
+with open(os.path.join(ROOT, "data", "rank.json"), "w", encoding="utf-8") as f:
+    json.dump({"boards": boards}, f, ensure_ascii=False, separators=(",", ":"))
+for b in boards:
+    print(f"排行榜「{b['title']}」：", "、".join(f"{r['name']} {r['v']}" for r in b["rows"][:5]))
 
 index = {"meta": {"generated": today, "stationSource": "交通部 PTX／臺鐵公司", "stationDate": SRC_TIME,
                   "walkK": WALK_K, "walkV": WALK_V, "walkMax": WALK_MAX, "walks": WALKS,

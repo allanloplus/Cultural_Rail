@@ -96,7 +96,7 @@
       '<p class="lede">全臺 ' + m.stations + " 個臺鐵車站裡，有 <b>" + m.stationsWith + "</b> 站出站走 " + m.walkMax + " 分鐘內就有古蹟或歷史建築，一共 <b>" + m.sitesReach + "</b> 處。挑一條線、選幾站，排一趟不用開車的小旅行。</p>" +
       "</div></section>" +
       '<section class="wrap home-lines"><h2>幹線</h2><ul class="ln-list">' + group("幹線") + '</ul><h2>支線</h2><ul class="ln-list">' + group("支線") + "</ul>" +
-      '<p class="hint">每一點是一個車站，點越大代表步行 ' + m.walkMax + " 分鐘內的文資越多；紅圈是車站本身就是文資。目前開放海線，其餘路線整理中。</p></section>";
+      '<p class="hint">每一點是一個車站，點越大代表步行 ' + m.walkMax + " 分鐘內的文資越多；紅圈是車站本身就是文資。</p></section>";
     renderTripbar(null);
   }
 
@@ -131,7 +131,7 @@
         return;
       }
       var s = it.s, list = it.list, n = list.length, r = rep(list), hs = s.h && list.filter(function (o) { return o.st; })[0];
-      var sz = n ? Math.round(26 + Math.sqrt(n) * 6) : 14, hang = "";
+      var sz = n ? Math.min(54, Math.round(26 + Math.sqrt(n) * 5)) : 14, hang = "";
       if (n) {
         hang = '<span class="st-ph' + (n > 1 ? " multi" : "") + '">' + (n > 1 ? img(r[1], "s", "ph2") : "") + img(r[0], "s", "ph1") + "</span>" +
           '<span class="st-lv">' + list.slice().sort(function (a, b) { return a.k - b.k; }).slice(0, 8).map(function (o) { return '<i class="lvd lv' + o.k + '"></i>'; }).join("") + (n > 8 ? "<em>+" + (n - 8) + "</em>" : "") + "</span>" +
@@ -298,6 +298,27 @@
   }
   function tripHrefRaw(lid) { return "#/trip/" + lid + "/" + state.walk + "/" + (trip[lid] || []).join("."); }
 
+  /* ---------- 排行榜 ---------- */
+  var RANK = null;
+  function viewRank() {
+    (RANK ? Promise.resolve(RANK) : getJSON("data/rank.json").then(function (d) { RANK = d; return d; })).then(function (d) {
+      var color = {}; IDX.lines.forEach(function (l) { color[l.id] = l.color; });
+      var h = d.boards.map(function (b) {
+        var max = b.text ? 0 : Math.max.apply(null, b.rows.map(function (r) { return r.v; }));
+        var rows = b.rows.map(function (r, i) {
+          var w = b.text ? 0 : Math.max(6, (b.asc ? (max - r.v + 1) / max : r.v / max) * 100);
+          return '<li style="--lc:' + color[r.line] + ";--w:" + w + '%"' + (r.k != null ? ' class="lvc' + r.k + '"' : "") + '><a href="#/line/' + r.line + "/" + r.id + '"><span class="rk-n">' + (i + 1) + '</span><span class="rk-m"><b>' + esc(r.name) + "</b>" +
+            (r.note ? "<small>" + esc(r.note) + "</small>" : "") + (b.text ? "" : '<i class="rk-bar"></i>') + '</span><span class="rk-v"><b>' + esc(r.v) + "</b>" + esc(b.unit) + "</span></a></li>";
+        }).join("");
+        return '<section class="rk' + (b.all ? " rk-all" : "") + '" id="rk-' + b.id + '"><h2>' + esc(b.title) + '</h2><p class="hint">' + esc(b.sub) + '</p><ol>' + rows + "</ol></section>";
+      }).join("");
+      app.innerHTML = '<div class="rank"><section class="home-hero"><div class="wrap"><p class="kicker">全臺 ' + IDX.meta.stations + ' 個臺鐵車站</p><h1>哪一站，<br>下車就有文資？</h1>' +
+        '<p class="lede">把每個車站走路 ' + IDX.meta.walkMax + " 分鐘內的文資全部算過一遍。點站名直接看那一站。距離與時間皆為推估。</p></div></section>" +
+        '<div class="wrap rk-grid">' + h + "</div></div>";
+    });
+    renderTripbar(null);
+  }
+
   /* ---------- 資料說明 ---------- */
   function viewAbout() {
     var m = IDX.meta;
@@ -324,6 +345,7 @@
       if (!ok) { location.replace("#/"); return; }
       p = loadLine(parts[1]).then(function (line) { if (parts[2]) viewStation(line, parts[2]); else viewLine(line); document.title = (parts[2] ? "" : "") + line.name + "｜搭火車逛文資"; });
     } else if (parts[0] === "trip") { viewTrip(parts); document.title = "我的行程｜搭火車逛文資"; }
+    else if (parts[0] === "rank") { viewRank(); document.title = "排行榜｜搭火車逛文資"; }
     else if (parts[0] === "about") { viewAbout(); document.title = "資料說明｜搭火車逛文資"; }
     else { viewHome(); document.title = "搭火車逛文資"; }
     Promise.resolve(p).then(function () { if (key !== lastKey) { window.scrollTo(0, 0); lastKey = key; } });
