@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>搭火車逛文資</title>
+<meta name="description" content="以臺鐵路線為主軸，看每個車站走路就到的古蹟與歷史建築，排一趟火車小旅行。">
+<meta name="theme-color" content="#f6f1e7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#17130f" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="assets/css/rail.css">
+</head>
+<body>
+<a class="skip" href="#app">跳到主要內容</a>
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="#/"><img src="assets/icon.svg" alt="" width="30" height="30"><span>搭火車逛文資</span></a>
+    <nav class="top-nav" aria-label="主選單">
+      <a href="#/" data-nav="home">路線</a>
+      <a href="#/rank" data-nav="rank">排行榜</a>
+      <a href="#/trip" data-nav="trip">我的行程</a>
+      <a href="#/about" data-nav="about">說明</a>
+    </nav>
+  </div>
+</header>
+<main id="app" tabindex="-1"><p class="loading wrap">列車進站中…</p></main>
+<div id="tripbar" class="tripbar" hidden></div>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <p>規劃設計：Allan Lo，<a href="https://www.123hi.org" target="_blank" rel="noopener">https://www.123hi.org</a></p>
+    <p class="foot-sis">姊妹站：<a href="https://cultural.123hi.org/" target="_blank" rel="noopener">文資知識網站</a>・<a href="https://cultural2.123hi.org/" target="_blank" rel="noopener">文資知識網站第二站</a>・<a href="https://cultural-visit.123hi.org/" target="_blank" rel="noopener">文資達人訪查</a>・<a href="https://cultural-atlas.123hi.org/" target="_blank" rel="noopener">文資地圖集</a></p>
+    <p class="foot-note">步行距離與時間為推估（直線距離 × 1.3、每分鐘 80 公尺），實際請以現場路況為準。</p>
+  </div>
+</footer>
+<script src="assets/js/rail.js" defer></script>
+</body>
+</html>
