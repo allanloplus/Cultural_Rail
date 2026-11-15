@@ -42,6 +42,15 @@
       t.replaceWith(w.firstChild);
     }
   }, true);
+  /* 角色：Allan（導覽員）與阿拉蕾（AI 小助手），圖檔與知識網站共用同一套 */
+  function say(who, mood, text, cls) {
+    return '<div class="say say-' + who + " " + (cls || "") + '"><img src="assets/characters/' + (who === "R" ? "arale-" : "allan-") + mood + '.webp" alt="" width="64" height="64" loading="lazy"><p><b>' +
+      (who === "R" ? "阿拉蕾" : "Allan") + "</b>" + text + "</p></div>";
+  }
+  function duo(a, r) { /* 全身像＋對話，用在各頁開頭 */
+    return '<div class="duo" aria-label="Allan 和阿拉蕾"><div class="duo-b">' + '<p class="bub bub-A"><b>Allan</b>' + a + '</p><p class="bub bub-R"><b>阿拉蕾</b>' + r + "</p></div>" +
+      '<div class="duo-p"><img src="assets/characters/allan-wave.webp" alt="Allan" width="560" height="657"><img src="assets/characters/arale-wave.webp" alt="阿拉蕾" width="311" height="640"></div></div>';
+  }
   var ICON_ST = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M3 11 12 4l9 7v1H3z" fill="currentColor"/><path d="M5 12h14v8H5z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 20v-5h4v5" fill="none" stroke="currentColor" stroke-width="2"/></svg>';
 
   /* ---------- 我的行程（存在瀏覽器） ---------- */
@@ -90,10 +99,11 @@
         : '<li><div class="ln" style="--lc:' + l.color + '">' + inner + "</div></li>";
     }
     function group(kind) { return IDX.lines.filter(function (l) { return l.kind === kind; }).map(row).join(""); }
-    app.innerHTML = '<section class="home-hero"><div class="wrap">' +
+    app.innerHTML = '<section class="home-hero has-duo"><div class="wrap">' +
       '<p class="kicker">臺鐵・' + m.stations + " 站・" + IDX.lines.length + " 條路線</p>" +
       "<h1>下一站，<br>走路就到的文資。</h1>" +
       '<p class="lede">全臺 ' + m.stations + " 個臺鐵車站裡，有 <b>" + m.stationsWith + "</b> 站出站走 " + m.walkMax + " 分鐘內就有古蹟或歷史建築，一共 <b>" + m.sitesReach + "</b> 處。挑一條線、選幾站，排一趟不用開車的小旅行。</p>" +
+      duo("今天不開車。火車一到站，古蹟就在出口附近。", "我把 " + m.stations + " 站全部算過了，有 " + m.stationsWith + " 站走路就到！先選一條線吧。") +
       "</div></section>" +
       '<section class="wrap home-lines"><h2>幹線</h2><ul class="ln-list">' + group("幹線") + '</ul><h2>支線</h2><ul class="ln-list">' + group("支線") + "</ul>" +
       '<p class="hint">每一點是一個車站，點越大代表步行 ' + m.walkMax + " 分鐘內的文資越多；紅圈是車站本身就是文資。</p></section>";
@@ -193,16 +203,31 @@
       (anyKey(state.cats) || anyKey(state.eras) ? '　<button type="button" class="link" data-clear>清除篩選</button>' : "");
     layout();
   }
+  var FACT_FACE = { "車站就是文資": ["A", "point"], "文資最多的一站": ["R", "surprised"], "最短的路看國定古蹟": ["A", "wink"], "最老的一處": ["A", "think"], "一條線跨越的時代": ["R", "think"], "下車 5 分鐘就有": ["R", "thumb"], "老實說": ["A", "scratch"] };
+  function lineTalk(line) {
+    var top = null, five = null;
+    line.stations.forEach(function (s) {
+      var n5 = s.sites.filter(function (o) { return o.m <= 5; }).length;
+      if (!top || s.sites.length > top.sites.length) top = s;
+      if (n5 && (!five || n5 > five.n)) five = { s: s, n: n5 };
+    });
+    if (!top || !top.sites.length) return say("R", "sad", "這條線走路 15 分鐘內沒有文資……", "") + say("A", "scratch", "老實說就是沒有。這條線當轉乘用，文資到別條線看。", "");
+    var a = "選" + esc(top.name) + "，走 15 分鐘內有 " + top.sites.length + " 處。";
+    if (five && five.s.id !== top.id) a += "趕時間就在" + esc(five.s.name) + "下車，出站 5 分鐘內就有 " + five.n + " 處。";
+    else if (five) a += "其中 " + five.n + " 處出站 5 分鐘就到。";
+    return say("R", "think", "Allan，" + esc(line.name) + "如果只能下車一站，要選哪裡？", "") + say("A", "point", a, "");
+  }
   function viewLine(line) {
     var f = line.facts.map(function (x, i) {
-      return '<li><button type="button" class="fact" data-st="' + x.st.join(".") + '" style="--i:' + i + '"><span class="fact-k">' + esc(x.k) + '</span><span class="fact-big"><b>' + esc(x.big) + "</b><i>" + esc(x.unit) + '</i></span><span class="fact-t">' + esc(x.t) + "</span>" +
+      var ff = FACT_FACE[x.k] || ["A", "smile"];
+      return '<li><button type="button" class="fact" data-st="' + x.st.join(".") + '" style="--i:' + i + '"><img class="fact-face" src="assets/characters/' + (ff[0] === "R" ? "arale-" : "allan-") + ff[1] + '.webp" alt="" width="60" height="60"><span class="fact-k">' + esc(x.k) + '</span><span class="fact-big"><b>' + esc(x.big) + "</b><i>" + esc(x.unit) + '</i></span><span class="fact-t">' + esc(x.t) + "</span>" +
         (x.st.length ? '<span class="fact-go">在路線圖上看 ↓</span>' : "") + "</button></li>";
     }).join("");
     app.innerHTML = '<div class="line" style="--lc:' + line.color + '">' +
       '<section class="lhero"><div class="wrap"><a class="back" href="#/">← 所有路線</a>' +
       '<p class="kicker">臺鐵' + esc(line.kind) + "・" + line.stations.length + " 站・" + line.km + " 公里</p>" +
       '<h1><span>' + esc(line.name) + '</span><em class="plate">' + esc(line.from) + "<i></i>" + esc(line.to) + "</em></h1>" +
-      (line.intro ? '<p class="lede">' + esc(line.intro) + "</p>" : "") +
+      (line.intro ? '<p class="lede">' + esc(line.intro) + "</p>" : "") + '<div class="talk">' + lineTalk(line) + "</div>" +
       '<h2 class="sr-only">這條線上讓人意外的事</h2><ul class="facts">' + f + "</ul></div></section>" +
       '<div class="flt-bar"><div class="wrap flt" id="flt"></div></div>' +
       '<section class="wrap dg-sec"><div class="dg-headline"><h2>路線圖</h2><p id="dg-sum"></p></div>' +
@@ -246,16 +271,24 @@
     var st = line.stations[i], prev = line.stations[i - 1], next = line.stations[i + 1], list = pick(st);
     var hs = list.filter(function (o) { return o.st; })[0];
     var visit = list.reduce(function (a, o) { return a + o.v; }, 0);
+    var tip;
+    if (hs) tip = say("A", "point", "先別急著出站，你腳下這座車站就是" + LV[hs.k] + "，" + yearText(hs) + "落成。");
+    else if (!list.length) tip = say("R", "sad", "這一站走路 " + state.walk + " 分鐘內沒有文資，把時間拉長，或看下一站吧。");
+    else if (list[0].m <= 2) tip = say("R", "surprised", "出站走 " + list[0].m + " 分鐘就到「" + esc(list[0].n) + "」，比找廁所還快！");
+    else {
+      var best = list.slice().sort(function (a, b) { return a.k - b.k || a.d - b.d; })[0];
+      tip = say("A", "wink", "時間不多的話先去「" + esc(best.n) + "」，" + (best.k === 0 ? "它是國定古蹟，" : "") + "走 " + best.m + " 分鐘。");
+    }
     function nb(s, dir) { return s ? '<a class="pl-nb ' + dir + '" href="#/line/' + line.id + "/" + s.id + '"><span>' + esc(s.name) + "</span><small>" + esc(s.en) + "</small></a>" : '<span class="pl-nb ' + dir + ' end"><span>終點</span></span>'; }
     var walkSeg = IDX.meta.walks.map(function (w) { return '<button type="button" data-walk="' + w + '" aria-pressed="' + (state.walk === w) + '">' + w + " 分</button>"; }).join("");
     app.innerHTML = '<div class="station" style="--lc:' + line.color + '"><div class="wrap">' +
       '<a class="back" href="#/line/' + line.id + '">← ' + esc(line.name) + "路線圖</a>" +
       '<div class="st-headrow"><div class="plate-big"><p class="pl-line">' + esc(line.name) + "・" + st.km + ' 公里</p><h1>' + esc(st.name) + '</h1><p class="pl-en">' + esc(st.en) + '</p><div class="pl-bar"><i></i></div><div class="pl-nbs">' + nb(prev, "prev") + nb(next, "next") + "</div></div>" +
       '<div class="st-sum">' +
-      (hs ? '<p class="st-banner lvc' + hs.k + '">' + ICON_ST + "<span>這座車站本身就是<b>" + LV[hs.k] + "</b>，" + yearText(hs) + "落成。</span></p>" : "") +
+      
       (list.length ? '<p class="st-big"><b>' + list.length + "</b> 處文資，走路 " + state.walk + " 分鐘內</p><p class=\"st-sub\">最近的只要 " + list[0].m + " 分鐘；全部看完的建議停留時間合計約 " + dur(visit) + "（不含走路）。</p>"
         : '<p class="st-big">步行 ' + state.walk + " 分鐘內沒有符合條件的文資</p><p class=\"st-sub\">把步行時間拉長，或回路線圖換一站。</p>") +
-      '<div class="flt-g"><span class="flt-l">步行</span><div class="seg">' + walkSeg + "</div></div>" +
+      tip + '<div class="flt-g"><span class="flt-l">步行</span><div class="seg">' + walkSeg + "</div></div>" +
       '<p><button type="button" class="btn btn-trip" data-trip="' + st.id + '" aria-pressed="' + inTrip(line.id, st.id) + '"><span class="t-off">＋ 加入我的行程</span><span class="t-on">✓ 已在我的行程</span></button></p>' +
       "</div></div>" +
       (list.length ? '<div class="st-body"><aside class="st-map"><h2>方位示意</h2>' + radar(st, list) + '<p class="hint">中央方塊是車站，同心圓是步行 5、10、15 分鐘的推估範圍；號碼對應右邊的卡片。這不是地圖，實際路線請按卡片上的「步行導航」。</p></aside>' +
@@ -270,7 +303,7 @@
     if (!lid) {
       var ks = Object.keys(trip);
       if (ks.length) { location.replace(tripHrefRaw(ks[0])); return; }
-      app.innerHTML = '<section class="wrap empty-page"><h1>我的行程</h1><p>還沒有選車站。到路線圖上，按車站右上角的 ＋ 就能加入。</p><p><a class="btn btn-solid" href="#/">去選路線</a></p></section>';
+      app.innerHTML = '<section class="wrap empty-page"><h1>我的行程</h1><p>還沒有選車站。</p>' + say("R", "explain", "到路線圖上，按車站旁邊的 ＋ 就能加進行程，選好我幫你算時間。") + '<p></p><p><a class="btn btn-solid" href="#/">去選路線</a></p></section>';
       renderTripbar(null); return;
     }
     loadLine(lid).then(function (line) {
@@ -288,7 +321,7 @@
       }).join("");
       app.innerHTML = '<div class="trip" style="--lc:' + line.color + '"><div class="wrap"><a class="back" href="#/line/' + line.id + '">← ' + esc(line.name) + "路線圖</a>" +
         (sts.length ? '<article class="tp"><header><p class="kicker">搭火車逛文資・行程摘要</p><h1>' + esc(line.name) + "小旅行</h1><p class=\"tp-route\">" + sts.map(function (s) { return esc(s.name); }).join("<i></i>") + "</p>" +
-          '<dl class="tp-nums"><div><dt>下車</dt><dd><b>' + sts.length + "</b> 站</dd></div><div><dt>文資</dt><dd><b>" + nSites + "</b> 處</dd></div><div><dt>站外時間</dt><dd><b>" + dur(total) + '</b></dd></div></dl></header><ol class="tp-list">' + rows + "</ol>" +
+          '<dl class="tp-nums"><div><dt>下車</dt><dd><b>' + sts.length + "</b> 站</dd></div><div><dt>文資</dt><dd><b>" + nSites + "</b> 處</dd></div><div><dt>站外時間</dt><dd><b>" + dur(total) + '</b></dd></div></dl><img class="tp-char" src="assets/characters/arale-fight.webp" alt="阿拉蕾" width="273" height="287"></header><ol class="tp-list">' + rows + "</ol>" +
           '<footer><p>每站列出步行 ' + state.walk + " 分鐘內最值得看的 3 處。站外時間＝建議停留＋來回步行，皆為推估，不含候車與乘車；班次請查臺鐵時刻表。</p></footer></article>" +
           '<p class="tp-actions"><button type="button" class="btn btn-solid" data-share>複製分享網址</button><button type="button" class="btn" data-print>列印／存成 PDF</button><button type="button" class="btn" data-adopt>存成我的行程</button></p><p class="tp-msg" role="status" aria-live="polite"></p>'
           : '<section class="empty-page"><h1>我的行程</h1><p>這個網址裡沒有車站。</p></section>') + "</div></div>";
@@ -312,8 +345,9 @@
         }).join("");
         return '<section class="rk' + (b.all ? " rk-all" : "") + '" id="rk-' + b.id + '"><h2>' + esc(b.title) + '</h2><p class="hint">' + esc(b.sub) + '</p><ol>' + rows + "</ol></section>";
       }).join("");
-      app.innerHTML = '<div class="rank"><section class="home-hero"><div class="wrap"><p class="kicker">全臺 ' + IDX.meta.stations + ' 個臺鐵車站</p><h1>哪一站，<br>下車就有文資？</h1>' +
-        '<p class="lede">把每個車站走路 ' + IDX.meta.walkMax + " 分鐘內的文資全部算過一遍。點站名直接看那一站。距離與時間皆為推估。</p></div></section>" +
+      app.innerHTML = '<div class="rank"><section class="home-hero has-duo"><div class="wrap"><p class="kicker">全臺 ' + IDX.meta.stations + ' 個臺鐵車站</p><h1>哪一站，<br>下車就有文資？</h1>' +
+        '<p class="lede">把每個車站走路 ' + IDX.meta.walkMax + " 分鐘內的文資全部算過一遍。點站名直接看那一站。距離與時間皆為推估。</p>" +
+        duo("第一名不是臺北喔，猜猜看是哪一站？", "下車 5 分鐘內最多的是" + esc(d.boards[0].rows[0].name) + "，有 " + d.boards[0].rows[0].v + " 處。臺北是走 15 分鐘的冠軍。") + "</div></section>" +
         '<div class="wrap rk-grid">' + h + "</div></div>";
     });
     renderTripbar(null);

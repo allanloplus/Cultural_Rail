@@ -358,3 +358,44 @@ a.pl-nb:hover { background: var(--lc-soft); }
 .rk-all .rk-v b { color: var(--lvc); }
 @media (prefers-color-scheme: dark) { .rk li { --lc-d: color-mix(in srgb, var(--lc) 70%, #fff); } }
 @media (max-width: 640px) { .top-nav a { padding: 6px 7px; } .brand img { display: none; } }
+
+/* Allan 和阿拉蕾 */
+.say { display: flex; align-items: flex-start; gap: 10px; max-width: 34em; }
+.say img { width: 56px; height: 56px; flex: none; border-radius: 50%; object-fit: cover; object-position: 50% 12%; background: var(--mint); border: 2.5px solid var(--card); box-shadow: 0 2px 6px rgba(40, 25, 10, .2); }
+.say-R img { background: #f7e2a6; }
+.say p { position: relative; background: var(--card); border: 1.5px solid var(--line); border-radius: 4px 16px 16px 16px; padding: 8px 14px; font-size: 15px; line-height: 1.65; box-shadow: var(--shadow); }
+.say p b { display: block; font-size: 12px; letter-spacing: .08em; color: var(--lc-ink); }
+.say-R p b { color: var(--hinoki); }
+.talk { display: grid; gap: 10px; margin-top: 18px; }
+.talk .say:nth-child(2) { margin-left: 34px; animation: rise .5s .25s both; }
+.talk .say:first-child { animation: rise .5s both; }
+.fact { padding-right: 76px; }
+.fact-face { position: absolute; right: 10px; top: 10px; width: 58px; height: 58px; border-radius: 50%; object-fit: cover; object-position: 50% 12%; background: var(--lc-soft); border: 2px solid var(--card); box-shadow: 0 1px 4px rgba(40, 25, 10, .18); transition: transform .25s; }
+.fact:hover .fact-face { transform: rotate(-6deg) scale(1.1); }
+.home-hero.has-duo .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 400px); column-gap: 32px; align-items: end; }
+.home-hero.has-duo .wrap > :not(.duo) { grid-column: 1; }
+.duo { grid-column: 2 !important; grid-row: 1 / span 3; display: flex; flex-direction: column; gap: 6px; }
+.duo-b { display: grid; gap: 8px; }
+.bub { position: relative; background: var(--card); border: 1.5px solid var(--line); border-radius: 16px; padding: 8px 14px; font-size: 14.5px; line-height: 1.6; box-shadow: var(--shadow); max-width: 19em; animation: rise .5s both; }
+.bub b { display: block; font-size: 12px; letter-spacing: .08em; color: var(--teal); }
+.bub-R { justify-self: end; animation-delay: .35s; } .bub-R b { color: var(--hinoki); }
+.bub::after { content: ""; position: absolute; bottom: -8px; width: 14px; height: 14px; background: var(--card); border: solid var(--line); border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); }
+.bub-A::after { left: 22%; } .bub-R::after { right: 22%; }
+.duo-p { display: flex; justify-content: space-around; align-items: flex-end; margin-top: 6px; }
+.duo-p img { height: 200px; width: auto; filter: drop-shadow(0 6px 10px rgba(40, 25, 10, .18)); transform-origin: 50% 100%; animation: sway 4s ease-in-out infinite; }
+.duo-p img + img { height: 186px; animation-delay: -2s; }
+@keyframes sway { 50% { transform: rotate(1.6deg); } }
+.tp header { position: relative; } .tp-char { position: absolute; right: 18px; bottom: 0; height: 120px; width: auto; }
+.st-sum .say { margin-block: 2px; }
+.empty-page .say { margin-bottom: 18px; }
+@media (max-width: 860px) {
+  .home-hero.has-duo .wrap { display: block; }
+  .duo { margin-top: 22px; max-width: 420px; }
+  .duo-p img { height: 150px; } .duo-p img + img { height: 140px; }
+}
+@media (max-width: 640px) {
+  .talk .say:nth-child(2) { margin-left: 16px; }
+  .say img { width: 48px; height: 48px; }
+  .tp-char { height: 84px; right: 8px; }
+  .fact-face { width: 50px; height: 50px; }
+}

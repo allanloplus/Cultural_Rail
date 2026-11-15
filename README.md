@@ -25,6 +25,8 @@
 - **排行榜**（`#/rank`）：下車 5 分鐘內文資最多的車站、15 分鐘內最多的車站、一站跨最多時代、最短的路看國定古蹟、走路就到的最老文資、車站本身就是文資的全名單。
 - **我的行程**（`#/trip/coast/15/2110.2220.3360`）：在路線圖上按車站的 ＋ 勾選，產生行程摘要。行程只存在瀏覽器（localStorage）與網址裡。
 
+導覽員 Allan 與 AI 小助手阿拉蕾會出現在各頁：首頁與排行榜開頭的全身像與對話、路線頁的問答與事實卡上的表情、車站頁的一句提示、行程摘要。台詞由 `assets/js/rail.js` 依資料產生（`duo()`、`say()`、`lineTalk()`），圖檔 `assets/characters/` 複製自 Cultural_Heritage 的同名資料夾，那邊更新時要再複製一次。
+
 ## 架構
 
 純靜態網站，沒有後台與資料庫，也沒有使用地圖引擎或其他外部函式庫（字型與知識網站相同，取自 Google Fonts）。所有計算在建置時用 Python 完成。
@@ -33,6 +35,7 @@
 index.html               唯一的頁面
 assets/css/rail.css      樣式（配色、深色模式沿用知識網站 site.css 的變數）
 assets/js/rail.js        路由與畫面
+assets/characters/       Allan 與阿拉蕾的圖檔（複製自 Cultural_Heritage）
 data/raw/                抓一次就存檔的臺鐵原始資料
 data/index.json          路線清單與全站統計
 data/lines/<路線>.json   各線的車站、步行範圍內的文資、開頭的事實
