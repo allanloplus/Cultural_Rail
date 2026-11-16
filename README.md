@@ -12,6 +12,8 @@
 | https://cultural-visit.123hi.org/ | 文資達人訪查 | allanloplus/Cultural_Heritage_Master |
 | https://cultural-atlas.123hi.org/ | 文資地圖集 | allanloplus/Cultural_Atlas |
 | https://cultural-rail.123hi.org/ | 搭火車逛文資（本 repo） | allanloplus/Cultural_Rail |
+| https://cultural-town.123hi.org/ | 鄉鎮文資性格卡 | allanloplus/Cultural_Town |
+| https://cultural-ascent.123hi.org/ | 從海口到山頂 | allanloplus/Cultural_Ascent |
 
 ## 目前的進度
 
