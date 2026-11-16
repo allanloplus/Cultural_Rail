@@ -399,3 +399,4 @@ a.pl-nb:hover { background: var(--lc-soft); }
   .tp-char { height: 84px; right: 8px; }
   .fact-face { width: 50px; height: 50px; }
 }
+@media (max-width: 640px) { .tp-nums { padding-right: 78px; gap: 18px; } .tp-nums b { font-size: 24px; } .tp-char { height: 76px; right: 4px; } }
