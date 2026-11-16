@@ -63,7 +63,8 @@ button { font: inherit; color: inherit; cursor: pointer; background: none; borde
 
 /* 首頁 */
 .home-hero { padding: 56px 0 28px; background: radial-gradient(900px 300px at 85% 0, color-mix(in srgb, var(--mint) 55%, transparent), transparent 70%); }
-.home-hero h1 { font-size: clamp(36px, 7vw, 68px); letter-spacing: .02em; margin: 10px 0 18px; }
+.home-hero h1 { font-size: clamp(32px, 6.2vw, 62px); letter-spacing: .02em; margin: 10px 0 8px; }
+.home-sub { font-family: var(--f-display); font-size: clamp(19px, 2.6vw, 26px); color: var(--lc-ink); margin-bottom: 16px; }
 .lede { max-width: 40em; font-size: 17px; color: var(--muted); }
 .lede b { color: var(--ink); font-family: var(--f-display); font-size: 1.25em; }
 .home-lines { padding-bottom: 56px; }

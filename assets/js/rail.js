@@ -101,7 +101,7 @@
     function group(kind) { return IDX.lines.filter(function (l) { return l.kind === kind; }).map(row).join(""); }
     app.innerHTML = '<section class="home-hero has-duo"><div class="wrap">' +
       '<p class="kicker">臺鐵・' + m.stations + " 站・" + IDX.lines.length + " 條路線</p>" +
-      "<h1>下一站，<br>走路就到的文資。</h1>" +
+      '<h1>Allan 和阿拉蕾<br>陪你搭火車逛文資</h1><p class="home-sub">下一站，走路就到的文資。</p>' +
       '<p class="lede">全臺 ' + m.stations + " 個臺鐵車站裡，有 <b>" + m.stationsWith + "</b> 站出站走 " + m.walkMax + " 分鐘內就有古蹟或歷史建築，一共 <b>" + m.sitesReach + "</b> 處。挑一條線、選幾站，排一趟不用開車的小旅行。</p>" +
       duo("今天不開車。火車一到站，古蹟就在出口附近。", "我把 " + m.stations + " 站全部算過了，有 " + m.stationsWith + " 站走路就到！先選一條線吧。") +
       "</div></section>" +
@@ -381,7 +381,7 @@
     } else if (parts[0] === "trip") { viewTrip(parts); document.title = "我的行程｜搭火車逛文資"; }
     else if (parts[0] === "rank") { viewRank(); document.title = "排行榜｜搭火車逛文資"; }
     else if (parts[0] === "about") { viewAbout(); document.title = "資料說明｜搭火車逛文資"; }
-    else { viewHome(); document.title = "搭火車逛文資"; }
+    else { viewHome(); document.title = "Allan 和阿拉蕾陪你搭火車逛文資"; }
     Promise.resolve(p).then(function () { if (key !== lastKey) { window.scrollTo(0, 0); lastKey = key; } });
   }
 
