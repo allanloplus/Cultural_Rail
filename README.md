@@ -40,6 +40,8 @@ data/raw/                抓一次就存檔的臺鐵原始資料
 data/index.json          路線清單與全站統計
 data/lines/<路線>.json   各線的車站、步行範圍內的文資、開頭的事實
 data/rank.json           排行榜
+assets/og.png            分享到社群時的縮圖（1200×630）
+tools/og.html            縮圖的原稿：用瀏覽器以 1200×630 開啟後截圖，存成 assets/og.png
 tools/fetch_tra.py       抓臺鐵車站、路線、站序 → data/raw/
 tools/build.py           產生 data/index.json、data/lines/、data/rank.json
 ```
